@@ -33,11 +33,13 @@ export default {
             this.reset();
         },
         addIBAN() {
-            axios
-                .post('iban/add', { iban: this.inputValue })
-                .then(response => { this.ibanList = response.data  })
-                .catch((error) => { this.errorMessage = error.response.data.apiResponse })
-                .finally( this.getIbanList )
+            if(this.inputValue) {
+                axios
+                    .post('iban/add', { iban: this.inputValue })
+                    .then(response => { this.ibanList = response.data  })
+                    .catch((error) => { this.errorMessage = error.response.data.apiResponse })
+                    .finally( this.getIbanList )
+            }
         },
         uploadFile() {
             this.reset()
@@ -58,8 +60,8 @@ export default {
         reset() {
             this.errorMessage = null;
         },
-        getIbanList(filter) {
-            axios
+        async getIbanList(filter) {
+            await axios
                 .get(filter == null ? 'iban/list' : 'iban/list?filter_type=' + filter)
                 .then(response => { this.ibanList = response.data  })
                 .catch((error) => { this.errorMessage = error.response.data });
